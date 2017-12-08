@@ -1,5 +1,7 @@
 var Task = require("./models/task");
 var User = require("./models/user");
+var moment = require('moment');
+
 var send = require('gmail-send')({
     user: 'nicks.list.reminder@gmail.com', 
     pass: 'DevBootCamp123',
@@ -23,7 +25,7 @@ module.exports = function(app, passport) {
         //LOGIN
         app.get('/login', function(req, res) {
             // render the page and pass in any flash data if it exists
-            res.render('login.ejs', { message: req.flash('loginMessage') }); 
+            res.render('login.ejs', { message: req.flash('loginMessage')}); 
         });
 
         //PROCESS LOGIN
@@ -68,10 +70,11 @@ module.exports = function(app, passport) {
         //LIST OF TASKS BY USER
         app.get('/list',isLoggedIn,function(req,res){
             Task
-            .find({ userID: req.user._id },function(err,data){
+            .find({ userID: req.user._id},function(err,data){
                 //console.log(data);
                 res.render('list.ejs',{
-                    tasks : data
+                    tasks : data,
+                    moment : moment
                 });
             })
         });
@@ -126,34 +129,18 @@ module.exports = function(app, passport) {
                 });
             })
         });
+        
+    app.post('/taskActor',isLoggedIn,function(req,res){
 
-        app.post('/taskActor',isLoggedIn,function(req,res){
-            if(req.body.action == 'complete'){
-                    task.update,
-                    tasks : data,
-                };
-                //UPDATE COMPLETE STATUS
-                //REDIRECT TO LIST
-                res.redirect('list.ejs"')
-                
-            }else if(req.body.action == 'confirm'){
-                task.update,
-                task : data,
+    });
 
-                };
-                //UPDATE CONFIRM STATUS
-                //REDIRECT TO MASTERLIST
-                res.redirect('/masterlist')                
-
-        })
-    };
-
-//ROUTE MIDDLEWARE TO ENSURE USER IS LOGGED IN
-function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-    // if they aren't redirect them to the home page
-    res.redirect('/');
+    //ROUTE MIDDLEWARE TO ENSURE USER IS LOGGED IN
+    function isLoggedIn(req, res, next) {
+        // if user is authenticated in the session, carry on 
+        if (req.isAuthenticated())
+            return next();
+        // if they aren't redirect them to the home page
+        res.redirect('/');
+    }
 }
     

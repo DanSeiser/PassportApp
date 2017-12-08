@@ -92,12 +92,34 @@
                         <div class="col-sm-10">
                               <div>NAME : <%= tasks[i]['name'] %></div>
                               <div>DESCRIPTION : <%= tasks[i]['description'] %></div>
+                              <%  
+                              var completeBy = '';
+                              if(tasks[i]['completeBy'] != undefined){
+                                completeBy =  moment(tasks[i]['completeBy']).format('MM/DD/YYYY');
+                              };
+                             %>
+                             <%if(completeBy != ''){%><div>COMPLETE BY: <%=completeBy%></div><%}%>
                         </div>
                         <div class="col-sm-2">
+                            
+                            <% 
+                                var datePassed = false;
+                                if(completeBy != '' && moment(completeBy).isBefore(moment())){
+                                    datePassed = true; 
+                             };
+                            if(tasks[i]['isComplete'] != true && datePassed){%>
+                                FAILED - COMPLETION DATE PASSED
+                            <%} else if (tasks[i]['isComplete'] == true && tasks[i]['isConfirmed'] != true ){%>
+                                COMPLETE, NOT CONFIRMED 
+                            <%} else if (tasks[i]['isComplete'] == true && tasks[i]['isConfirmed'] == true ){%>
+                                COMPLETE AND CONFIRMED
+                            <%} else if (tasks[i]['isComplete'] != true){%>
                             <button class="btn btn-default btn-sm completionButton" 
                                 style='color: white; background-color: #F76B8A;'
                                 id="completeButton_<%= tasks[i]['_id'] %>">
                                 Task Completed</button>
+                            <%}%>
+                            <!--END WRAP IN DATE CHECKER-->
                         </div>
                     </div>
                 <%}%>
