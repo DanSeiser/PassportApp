@@ -98,6 +98,8 @@ module.exports = function(app, passport) {
                 taskMaster      :  req.body.taskMaster,
                 userID          :  req.user._id,
                 userEmail       :  req.user.local.email,
+                userFirst       :  req.user.local.firstName,
+                userLast        :  req.user.local.lastName,
                 completeBy      :  req.body.completeBy,
                 isComplete      :  false,
                 isConfirmed     :  false
@@ -139,7 +141,7 @@ module.exports = function(app, passport) {
                     send({//SEND EMAIL
                         to : thisTaskMaster[0].local.email,
                         subject : "Nick's List Notification - A Task has been completed!",
-                        html : "<b>One of your underlings, " +newData.userEmail + ", has completed a task: "+ newData.name
+                        html : "<b>One of your underlings, " +newData.userFirst +' '+ newData.userLast + ", has completed a task: "+ newData.name
                         +"</b><br>Please <a href='http://127.0.0.1:8080/'>Click Here to Login</a> and confirm their task completion!"
                     })                              
 

@@ -9,6 +9,8 @@ var task = mongoose.Schema({
     taskMaster      :   String,
     userID          :   String,
     userEmail       :   String,
+    userFirst       :   String,
+    userLast        :   String,
     completeBy      :   Date,
     isComplete      :   Boolean,
     isConfirmed     :   Boolean,
