@@ -14,7 +14,8 @@ var task = mongoose.Schema({
     completeBy      :   Date,
     isComplete      :   Boolean,
     isConfirmed     :   Boolean,
-    dateCompleted   :   Date
+    dateCompleted   :   Date,
+    failureSent     :   Boolean
 });
 
 // methods ======================

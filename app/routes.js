@@ -138,8 +138,10 @@ module.exports = function(app, passport) {
         app.get('/task',function(req,res){
             res.redirect('/list')
         })
-
+    
     app.post('/taskActor',isLoggedIn,function(req,res){
+        console.log(req.body);
+        console.log('posted');
         if(req.body.action == 'complete'){
             Task.findOneAndUpdate(
                {_id : req.body.id},{isComplete : true, dateCompleted : Date.now()},{new : true},function(err,newData){
