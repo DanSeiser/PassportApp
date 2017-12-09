@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Nick's List</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
@@ -23,10 +24,44 @@
         <div class="col-sm-6">
             <div class="well">
                 <ul>
-               <!--LOOPS OVER THE TASK ARRAY BEING PASSED IN-->
-               <% for (i=0;i<tasks.length;i++){%>
-                    <li>NAME : <%= tasks[i]['name'] %>, EMAIL : <%= tasks[i]['email'] %></li>
-                <%}%>
+                <!--LOOPS OVER THE TASK ARRAY BEING PASSED IN-->
+                <% for (i=0;i<tasks.length;i++){%>
+                        <div class="row" style='padding: 10px;'>
+                            <div class="col-sm-10">
+                                <div>TASK BELONGING TO : <%= tasks[i]['userEmail'] %></div>
+                                <div>NAME : <%= tasks[i]['name'] %></div>
+                                <div>DESCRIPTION : <%= tasks[i]['description'] %></div>
+                                <%  
+                                var completeBy = '';
+                                if(tasks[i]['completeBy'] != undefined){
+                                    completeBy =  moment(tasks[i]['completeBy']).format('MM/DD/YYYY');
+                                };
+                                %>
+                                <%if(completeBy != ''){%><div>COMPLETE BY: <%=completeBy%></div><%}%><Br>
+                            </div>
+                            <div class="col-sm-2">
+                                <% 
+                                    var datePassed = false;
+                                    if(completeBy != '' && moment(completeBy).isBefore(moment())){
+                                        datePassed = true; 
+                                };
+                                if(tasks[i]['isComplete'] != true && datePassed){%>
+                                    FAILED - COMPLETION DATE PASSED
+                                <%} else if (tasks[i]['isComplete'] == true && tasks[i]['isConfirmed'] != true ){%>
+                                    <button class="btn btn-default btn-sm confirmationButton" 
+                                    style='color: white; background-color: #F76B8A;'
+                                    id="completeButton_<%= tasks[i]['_id'] %>">CONFIRM TASK COMPLETION</button> 
+                                <%} else if (tasks[i]['isComplete'] == true && tasks[i]['isConfirmed'] == true ){%>
+                                    COMPLETE AND CONFIRMED
+                                <%} else if (tasks[i]['isComplete'] != true){%>
+                                    <b>THIS TASK IS NOT YET COMPLETE</b>
+                                <%}%>
+                                <!--END WRAP IN DATE CHECKER-->
+                            </div>
+                        </div>
+                    <%}%>
+
+      
                 </ul>
             </div>
         </div>
@@ -34,5 +69,21 @@
     </div>
 
 </div>
+
+
+<form id="confirmationForm" action="/taskActor" method="post">
+    <input type="hidden" name="action" id="action" value="confirm">
+    <input type="hidden" name="id" id="id" value="">
+</form>
+<script>
+    $(document).ready(function(){
+        $('.confirmationButton').click(function(){
+            console.log(this.id)
+            thisID = this.id.split('_')[1];
+            $('#id').val(thisID);
+            $('#confirmationForm').submit();                     
+        })
+    })
+</script>
 </body>
 </html>

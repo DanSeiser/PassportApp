@@ -98,10 +98,9 @@
                                 completeBy =  moment(tasks[i]['completeBy']).format('MM/DD/YYYY');
                               };
                              %>
-                             <%if(completeBy != ''){%><div>COMPLETE BY: <%=completeBy%></div><%}%>
+                             <%if(completeBy != ''){%><div>COMPLETE BY: <%=completeBy%></div><%}%><Br>
                         </div>
                         <div class="col-sm-2">
-                            
                             <% 
                                 var datePassed = false;
                                 if(completeBy != '' && moment(completeBy).isBefore(moment())){
@@ -127,9 +126,7 @@
 
             </div>
         </div>
-
     </div>
-
 </div>
 
 <form id="completionForm" action="/taskActor" method="post">

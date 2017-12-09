@@ -98,7 +98,7 @@ module.exports = function(app, passport) {
                 description     :  req.body.description,
                 taskMaster      :  req.body.taskMaster,
                 userID          :  req.user._id,
-                userEmail       :  req.user.email,
+                userEmail       :  req.user.local.email,
                 completeBy      :  req.body.completeBy,
                 isComplete      :  false,
                 isConfirmed     :  false
@@ -125,13 +125,26 @@ module.exports = function(app, passport) {
             .find({ taskMaster: req.user._id },function(err,data){
                 //console.log(data);
                 res.render('masterList.ejs',{
-                    tasks : data
+                    tasks : data,
+                    moment : moment
                 });
             })
         });
         
     app.post('/taskActor',isLoggedIn,function(req,res){
-
+        if(req.body.action == 'complete'){
+            Task.update(
+               {_id : req.body.id},{isComplete : true, dateCompleted : Date.now()}
+            ).then(
+                res.redirect('/list')
+            )
+        }else if(req.body.action=='confirm'){
+            Task.update(
+                {_id : req.body.id},{isConfirmed : true}
+             ).then(
+                 res.redirect('/masterList')
+             )
+        }
     });
 
     //ROUTE MIDDLEWARE TO ENSURE USER IS LOGGED IN
