@@ -3,6 +3,7 @@
   "main": "server.js",
   "version": "1.0.0",
   "dependencies": {
+    "animate.css": "^3.5.2",
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.15.2",
     "connect-flash": "~0.1.1",

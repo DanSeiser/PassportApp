@@ -13,34 +13,34 @@
             
                 </style>
             </head>
-<body>
+<body style="background-color: #EAF6F6;">
 <%include header%>
 <div class="container">
 
     <div class="page-header text-center">
-        <h1>Create New Task</h1>
+        <h1 style="color: #F76B8A; font-family: 'Permanent Marker', cursive; font-size: 36pt;">Create New Task</h1>
     </div>
 
     <div class="row">
 
         <!-- LIST -->
-        <div class="col-sm-6">
-            <div class="well" style="color: gray; margin: 50px; border-radius: 10px; background-color: #EAF6F6; font-family: 'Poppins', sans-serif;">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div class="well" style="color: white; margin: 50px; border-radius: 10px; background-color: #66BFBF; font-family: 'Poppins', sans-serif;">
                     <form name="taskForm" action="/task" method="post">
-                    Task Name: <input type="text" name="name" id="name" style= 'margin-bottom: 20px; width: 100%;'>
+                    Task Name: <input type="text" name="name" id="name" style='margin-bottom: 20px; width: 100%; color: gray'>
                     <br>
-                    Task Description: <textarea name="description" id="description" style= 'margin-bottom: 20px; width: 100%;'></textarea> 
+                    Task Description: <textarea name="description" id="description" style='margin-bottom: 20px; width: 100%; color: gray'></textarea> 
                     <br>
-                    Completion Date: <input id="completeBy" type="date" name="completeBy" style= 'margin-bottom: 20px'>
+                    Completion Date: <input id="completeBy" type="date" name="completeBy" style='margin-bottom: 20px; color: gray'>
                     <br>
                     Task Master:
-                    <select name="taskMaster" id="taskMaster" style= 'margin-bottom: 20px; width: 100%;'>
+                    <select name="taskMaster" id="taskMaster" style='margin-bottom: 20px; width: 100%; color: gray'>
                         <% for (i=0;i<users.length;i++){%>
                             <option value="<%= users[i]['_id'] %>"><%= users[i]['local']['email'] %></option>
                         <%}%>
                     </select>
                     <br>
-                    <input type="submit" value="Submit that shit, yo!" style='color: white; background-color: #F76B8A; margin-top: 20px'>
+                    <input type="submit" value="Submit that shit, yo!" style='color: white; background-color: #F76B8A; margin-top: 20px; border-color:#F76B8A'>
                     </form>
             </div>
         </div>
