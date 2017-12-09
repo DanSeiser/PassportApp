@@ -38,7 +38,17 @@
                                     completeBy =  moment(tasks[i]['completeBy']).format('MM/DD/YYYY');
                                 };
                                 %>
-                                <%if(completeBy != ''){%><div>COMPLETE BY: <%=completeBy%></div><%}%><Br>
+                                <%if(completeBy != ''){%><div>COMPLETE BY: <%=completeBy%></div><Br><%}%>
+                                
+                                <%  
+                                var dateCompleted = '';
+                                if(tasks[i]['dateCompleted'] != undefined){
+                                    dateCompleted =  moment(tasks[i]['dateCompleted']).format('MM/DD/YYYY');
+                                    console.log(dateCompleted);
+                                };
+                                %>
+                                <%if(dateCompleted != ''){%><div>DATE COMPLETED: <%=dateCompleted%></div><Br><%}%>                                
+                                
                             </div>
                             <div class="col-sm-2">
                                 <% 
@@ -53,7 +63,7 @@
                                     style='color: white; background-color: #F76B8A;'
                                     id="completeButton_<%= tasks[i]['_id'] %>">CONFIRM TASK COMPLETION</button> 
                                 <%} else if (tasks[i]['isComplete'] == true && tasks[i]['isConfirmed'] == true ){%>
-                                    COMPLETE AND CONFIRMED
+                                    COMPLETE AND CONFIRMED - NO FURTHER ACTION
                                 <%} else if (tasks[i]['isComplete'] != true){%>
                                     <b>THIS TASK IS NOT YET COMPLETE</b>
                                 <%}%>
