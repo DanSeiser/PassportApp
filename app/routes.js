@@ -128,14 +128,25 @@ module.exports = function(app, passport) {
                     moment : moment
                 });
             })
-        });
-        
+        });  
     app.post('/taskActor',isLoggedIn,function(req,res){
         if(req.body.action == 'complete'){
-            Task.update(
-               {_id : req.body.id},{isComplete : true, dateCompleted : Date.now()}
-            ).then(
-                res.redirect('/list')
+            Task.findOneAndUpdate(
+               {_id : req.body.id},{isComplete : true, dateCompleted : Date.now()},{new : true},function(err,newData){
+                   User.find({_id : newData.taskMaster},function(err,thisTaskMaster){
+                    var taskMasterNotifyEmail  = thisTaskMaster[0].local.email;
+
+                    send({//SEND EMAIL
+                        to : thisTaskMaster[0].local.email,
+                        subject : "Nick's List Notification - A Task has been completed!",
+                        html : "<b>One of your underlings, " +newData.userEmail + ", has completed a task: "+ newData.name
+                        +"</b><br>Please <a href='http://127.0.0.1:8080/'>Click Here to Login</a> and confirm their task completion!"
+                    })                              
+
+                   }).then(
+                    res.redirect('/list')                    
+                   )
+               }
             )
         }else if(req.body.action=='confirm'){
             Task.update(
