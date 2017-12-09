@@ -90,7 +90,6 @@ module.exports = function(app, passport) {
             })          
         })
 
-
         //CREATE A NEW TASK BASED OFF OF A FORM SUBMISSION        
         app.post('/task',isLoggedIn,function(req,res){//HANDLE POST REQUEST
             Task.create({  //CREATE TASK
