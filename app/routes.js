@@ -135,7 +135,7 @@ module.exports = function(app, passport) {
                 Task.update({
                     _id : req.body.id
                 },{isComplete : true}).then(function(){
-                    res.redirect('list')
+                    res.redirect('/list')
                 })
             }else if(req.body.action == 'confirm'){
                 Task.update({
