@@ -129,8 +129,22 @@ module.exports = function(app, passport) {
                 });
             })
         });
-        
-    app.post('/taskActor',isLoggedIn,function(req,res){
+    
+        app.post('/taskActor',isLoggedIn,function(req,res){
+            if(req.body.action == 'complete'){
+                Task.update({
+                    _id : req.body.id
+                },{isComplete : true}).then(function(){
+                    res.redirect('list')
+                })
+            }else if(req.body.action == 'confirm'){
+                Task.update({
+                    _id : req.body.id 
+                },{isConfirmed : true}).then(function(){
+                    res.redirect('/masterlist')
+                });
+            }
+        })
 
     });
 
