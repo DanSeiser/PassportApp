@@ -92,6 +92,7 @@ module.exports = function(app, passport) {
 
         //CREATE A NEW TASK BASED OFF OF A FORM SUBMISSION        
         app.post('/task',isLoggedIn,function(req,res){//HANDLE POST REQUEST
+            thisUser : req.user;
             Task.create({  //CREATE TASK
                 name            :  req.body.name,
                 description     :  req.body.description,
@@ -103,22 +104,24 @@ module.exports = function(app, passport) {
                 completeBy      :  req.body.completeBy,
                 isComplete      :  false,
                 isConfirmed     :  false
-            }).then(
-                function(req){//PASS IN THE REQUEST
-                    User.find({_id : req.taskMaster},function(err,userData){//GET TASKMASTER EMAIL BASED ON FORM SUBMISSION
-                        console.log('sending email to ' + userData[0].local.email);
-                        send({//SEND EMAIL
-                            to : userData[0].local.email,
-                            subject : "Nick's List Notification - You've been made a taskmaster!",
-                            html : "<b>You have been selected as a Nick's List Taskmaster!</b><br>This means you're in charge of making sure a friend completes his or her task.<br><a href='http://127.0.0.1:8080/'>Click Here to Login!</a>"
-                        })                   
-                    }).then(function(){
-                        console.log('email sent')
-                        res.redirect('/list');//REDIECT TO LIST
-                    })
+            },function(){
+                console.log(req.user);
+                console.log(req.body);
+                
+                User.find({_id : req.body.taskMaster},function(err,userData){//GET TASKMASTER EMAIL BASED ON FORM SUBMISSION
+                    console.log('sending email to ' + userData[0].local.email);
+                  
+                    send({//SEND EMAIL
+                        to : userData[0].local.email,
+                        subject : "Nick's List Notification - You've been made a taskmaster!",
+                        html : "<b>" + req.user.local.firstName +' ' + req.user.local.lastName + " has selected you as a Nick's List Taskmaster!</b><br>This means you're in charge of making sure a friend completes his or her task: " + req.body.name+ ".<br><a href='http://127.0.0.1:8080/'>Click Here to Login!</a>"
+                    })                   
+                }).then(function(){
+                    console.log('email sent')
+                    res.redirect('/list');//REDIECT TO LIST
                 })
-            });
-            
+            })
+        })
        
         //MASTER LIST
         app.get('/masterList',isLoggedIn,function(req,res){
@@ -131,6 +134,11 @@ module.exports = function(app, passport) {
                 });
             })
         });  
+
+        app.get('/task',function(req,res){
+            res.redirect('/list')
+        })
+
     app.post('/taskActor',isLoggedIn,function(req,res){
         if(req.body.action == 'complete'){
             Task.findOneAndUpdate(
